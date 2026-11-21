@@ -166,9 +166,58 @@ input:focus,select:focus,textarea:focus{outline:0;border-color:var(--g6);box-sha
 .md.wide .im img{min-height:280px}
 .card:hover .im img{transform:scale(1.08)}
 .logo img{height:42px;width:auto;display:block}
+.bgfx{position:absolute;inset:0;overflow:hidden;pointer-events:none;z-index:0}
+.bgfx::before,.bgfx::after{content:"";position:absolute;border-radius:50%;filter:blur(70px);width:46vmax;height:46vmax;animation:drift 18s ease-in-out infinite alternate}
+.bgfx::before{left:-12vmax;top:-10vmax;background:rgba(169,192,160,.45)}
+.bgfx::after{right:-14vmax;bottom:-16vmax;background:rgba(184,156,94,.28);animation-duration:22s;animation-direction:alternate-reverse}
+@keyframes drift{to{transform:translate(8vmax,6vmax) scale(1.15)}}
+.lf{position:absolute;top:0;background:center/contain no-repeat;animation:fall linear infinite;will-change:transform}
+@keyframes fall{0%{transform:translate3d(0,-12vh,0) rotate(0)}33%{transform:translate3d(var(--dx),calc(var(--fh,100vh)*.3),0) rotate(120deg)}66%{transform:translate3d(calc(var(--dx)*-.6),calc(var(--fh,100vh)*.65),0) rotate(240deg)}100%{transform:translate3d(0,calc(var(--fh,100vh)*1.12),0) rotate(360deg)}}
+.dt{position:absolute;bottom:-10px;border-radius:50%;background:#fff;box-shadow:0 0 12px 4px rgba(184,156,94,.55);animation:rise linear infinite}
+@keyframes rise{0%{transform:translate(0,0);opacity:0}15%{opacity:.9}100%{transform:translate(var(--dx),calc(var(--fh,100vh)*-1));opacity:0}}
+.hero .wrap{position:relative;z-index:1}
+.about{overflow:hidden}.about .wrap{position:relative}
+.about::before{content:"";position:absolute;width:520px;height:520px;border-radius:50%;right:-160px;top:-180px;background:radial-gradient(circle,rgba(169,192,160,.25),transparent 70%);animation:drift 16s ease-in-out infinite alternate}
+.prods::before{content:"";position:absolute;inset:0;background:radial-gradient(520px 320px at 8% 12%,rgba(169,192,160,.22),transparent 70%),radial-gradient(520px 320px at 95% 90%,rgba(184,156,94,.16),transparent 70%);animation:fade 2s both;pointer-events:none}
+.prods .wrap{position:relative}
+body.loading{overflow:hidden}
+body.loading .hero h1 b,body.loading .hero p,body.loading .cta-row,body.loading .stats,body.loading .doc{animation-play-state:paused}
+#pre{position:fixed;inset:0;z-index:300;background:radial-gradient(circle at 50% 40%,var(--b1),var(--w));display:grid;place-items:center;transition:opacity .8s,visibility .8s,transform .8s}
+#pre.out{opacity:0;visibility:hidden;transform:scale(1.06)}
+.pl{text-align:center}.pl svg{width:120px;height:120px;overflow:visible}
+.pl .rg{fill:none;stroke:var(--g3);stroke-dasharray:3 7;transform-origin:60px 60px;animation:spin 6s linear infinite}
+.pl .lp{fill:var(--g6);fill-opacity:0;stroke:var(--g8);stroke-width:2;stroke-dasharray:220;stroke-dashoffset:220;animation:draw 1.3s ease forwards,fillin .8s 1s forwards}
+.pl .vn{fill:none;stroke:#fff;stroke-width:2;stroke-linecap:round;stroke-dasharray:80;stroke-dashoffset:80;animation:draw 1s .9s forwards}
+.pl .lf2{transform-origin:60px 100px;animation:sw2 3s 1.2s ease-in-out infinite}
+@keyframes draw{to{stroke-dashoffset:0}}@keyframes fillin{to{fill-opacity:1}}@keyframes sw2{50%{transform:rotate(5deg) scale(1.04)}}
+.pl b{display:block;font:600 1.9rem 'Cormorant Garamond',serif;color:var(--g8);margin-top:10px;animation:fade .8s .5s both}
+.pl small{display:block;color:var(--g6);letter-spacing:.2em;font-size:.72rem;text-transform:uppercase;animation:fade .8s .8s both}
+.pl em{display:block;width:160px;height:3px;background:var(--b2);border-radius:9px;margin:18px auto 0;overflow:hidden}
+.pl em::after{content:"";display:block;height:100%;background:linear-gradient(90deg,var(--g6),var(--sand));border-radius:9px;animation:ld 1.5s ease-out forwards}
+@keyframes ld{from{width:0}to{width:100%}}
+#pg{position:fixed;top:0;left:0;right:0;height:3px;z-index:60;background:linear-gradient(90deg,var(--g6),var(--sand));transform:scaleX(0);transform-origin:0 50%}
+#cg{position:fixed;left:0;top:0;width:340px;height:340px;margin:-170px;border-radius:50%;background:radial-gradient(circle,rgba(79,122,74,.16),transparent 68%);pointer-events:none;z-index:40}
+.rp{position:fixed;z-index:400;width:10px;height:10px;margin:-5px;border-radius:50%;border:2px solid var(--sand);pointer-events:none;animation:rp .7s ease-out forwards}
+@keyframes rp{to{transform:scale(7);opacity:0}}
+.bl{position:fixed;z-index:400;width:16px;height:16px;margin:-8px;pointer-events:none;background:center/contain no-repeat;animation:bl .9s cubic-bezier(.2,.7,.3,1) forwards}
+@keyframes bl{from{transform:translate(0,0) rotate(0) scale(.4);opacity:1}to{transform:translate(var(--x),var(--y)) rotate(var(--r)) scale(1);opacity:0}}
+.bgfx.lite::before,.bgfx.lite::after{display:none}
+section .wrap,footer .wrap{position:relative;z-index:1}footer{position:relative;overflow:hidden}
+h2.rv::after{content:"";display:block;height:3px;width:0;background:var(--sand);margin:12px 0 0;border-radius:9px;transition:width 1s .4s}
+h2.rv.in::after{width:64px}#faq h2::after{margin:12px auto 0}.cta h2::after{margin:12px auto 0}
+.card .im{position:relative}
+.card .im::after{content:"";position:absolute;inset:0;background:linear-gradient(105deg,transparent 40%,rgba(255,255,255,.5) 50%,transparent 60%);transform:translateX(-120%);transition:transform .9s}
+.card:hover .im::after{transform:translateX(120%)}
+@keyframes pulse{to{box-shadow:0 0 0 16px rgba(31,122,77,0)}}
+.btn.wa:not(.sm){box-shadow:0 0 0 0 rgba(31,122,77,.5);animation:pulse 2.2s infinite}
+.cta .btn.wa{box-shadow:0 0 0 0 rgba(37,165,102,.6)}
+#toast{position:fixed;left:50%;bottom:24px;z-index:500;transform:translate(-50%,30px);width:min(480px,92%);padding:14px 18px;border-radius:16px;background:var(--g8);color:#fff;box-shadow:var(--sh);opacity:0;visibility:hidden;transition:.4s;font-size:.95rem}#toast.bad{background:#8f2f27}#toast.show{opacity:1;visibility:visible;transform:translate(-50%,0)}
 </style>
 </head>
-<body>
+<body class="loading">
+<noscript><style>#pre{display:none}body.loading{overflow:auto}</style></noscript>
+<div id="pre" aria-hidden="true"><div class="pl"><svg viewBox="0 0 120 120"><circle class="rg" cx="60" cy="60" r="54"/><g class="lf2"><path class="lp" d="M60 104C30 88 26 52 60 18c34 34 30 70 0 86z"/><path class="vn" d="M60 100V42M60 70L46 56M60 82l15-14"/></g></svg><b>Devbhoomee Ayurveda</b><small>Natural path to wellness</small><em></em></div></div>
+<div id="pg"></div><div id="cg"></div>
 <header id="hd"><div class="wrap"><nav>
 <a class="logo" href="#home"><img src="images/logo.png" alt="" onload="this.nextElementSibling.style.display='none'" onerror="this.remove()"><i><svg width="18" height="18" viewBox="0 0 64 64"><path d="M32 56C14 46 12 26 32 6c20 20 18 40 0 50z" fill="#a9c0a0"/></svg></i>Devbhoomee Ayurveda</a>
 <div class="links" id="lk"><a href="#about">About</a><a href="#categories">Categories</a><a href="#products">Products</a><a href="#why">Why Us</a><a href="#faq">FAQ</a><a href="#contact">Contact</a><button class="btn sm" data-enq>Enquire Now</button></div>
@@ -176,7 +225,7 @@ input:focus,select:focus,textarea:focus{outline:0;border-color:var(--g6);box-sha
 </nav></div></header>
 
 <main>
-<section class="hero" id="home"><div class="wrap">
+<section class="hero" id="home"><div class="bgfx" aria-hidden="true"></div><div class="wrap">
 <div>
 <h1><span><b>Discover the</b></span><span><b>Natural Path</b></span><span><b>to Wellness</b></span></h1>
 <p>Explore Ayurvedic wellness products and discover a thoughtful approach to everyday well-being with Devbhoomee Ayurveda.</p>
@@ -260,18 +309,19 @@ input:focus,select:focus,textarea:focus{outline:0;border-color:var(--g6);box-sha
 <div class="f full"><label for="p">Which Medicine Are You Looking For?</label><input id="p" placeholder="Product name, if you know it"></div>
 <div class="f full"><label for="g">Message</label><textarea id="g" rows="3" placeholder="Anything else we should know?"></textarea></div>
 <button class="btn wa full" style="grid-column:1/-1" type="submit">Submit Enquiry</button>
-<p class="note">Submitting opens WhatsApp with your details. Nothing is stored on this website.</p>
+<p class="note">Your details are saved so our team can respond. Submitting opens WhatsApp with your message ready. Please press Send there to deliver it.</p>
 </form></div></div>
 
 <!-- Product modal -->
 <div class="mo" id="pm" role="dialog" aria-modal="true" aria-labelledby="pn"><div class="md wide">
 <button class="x" data-close aria-label="Close">×</button>
 <div class="im" id="pi"></div>
-<div class="tx"><span class="ptag" id="pc"></span><h2 id="pn"></h2><p id="pd"></p><p style="font-size:.85rem;color:#66766b">Please consult a qualified practitioner before use.</p><a class="btn wa" id="pw" href="#" target="_blank" rel="noopener">Enquire on WhatsApp</a></div></div></div>
+<div class="tx"><span class="ptag" id="pc"></span><h2 id="pn"></h2><p id="pd"></p><p style="font-size:.85rem;color:#66766b">Please consult a qualified practitioner before use.</p><button class="btn wa" id="pw" type="button">Enquire on WhatsApp</button></div></div></div>
 
 <!-- Policy modal -->
 <div class="mo" id="po" role="dialog" aria-modal="true"><div class="md pol"><button class="x" data-close aria-label="Close">×</button><h2 id="pt"></h2><div id="pb"></div></div></div>
 
+<script src="config.js"></script>
 <script>
 const WA="919311015592";
 const CATS=[["wm","Weight Management","⚖️",150],["pc","Piles Care","🌱",95],["dw","Digestive Wellness","🍃",120],["jb","Joint & Bone Care","🦴",35],["hs","Hair & Skin Care","✨",75],["mw","Men’s Wellness","🛡️",205],["ww","Women’s Wellness","🌸",330],["gw","General Wellness","🌿",140]];
@@ -339,8 +389,8 @@ let last=null;
 function open(m){last=document.activeElement;m.classList.add("open");document.body.style.overflow="hidden";setTimeout(()=>$("button,input,select",m)?.focus(),60)}
 function closeAll(){const was=$(".mo.open");$$(".mo.open").forEach(m=>m.classList.remove("open"));document.body.style.overflow="";if(was&&was.id=="enq")rememberDismiss();last&&last.focus&&last.focus()}
 function openProd(i){const p=P[i];$("#pi").innerHTML=`<img src="${IMG}" alt="${p[1]}" onerror="fb(this,${i})">`;$("#pc").textContent=CN[p[0]];$("#pn").textContent=p[1];$("#pd").textContent=p[2];
- $("#pw").href=wa(`Hello Devbhoomee Ayurveda, I would like to enquire about ${p[1]} (${CN[p[0]]}).`);open($("#pm"))}
-const POL={privacy:["Privacy Policy","<p>This website has no accounts, database or backend. Details you type into the enquiry form are used only to prepare a WhatsApp message on your own device. When you send it, WhatsApp’s own privacy terms apply.</p><p>We use your details only to respond to your enquiry. To ask us anything about your data, message us on WhatsApp.</p>"],
+ $("#pw").onclick=()=>{closeAll();openEnq(p)};open($("#pm"))}
+const POL={privacy:["Privacy Policy","<p>Details you submit in the enquiry form (name, mobile number, city, state, product and message) are saved securely so our team can respond. They are shared only with the team member who assists you. When you send your message, WhatsApp’s own privacy terms apply.</p><p>We use your details only to respond to your enquiry. To ask us anything about your data, message us on WhatsApp.</p>"],
 disc:["Medical Disclaimer","<p>Information on this website is for general awareness only. It is not medical advice, diagnosis or treatment.</p><p>Ayurvedic products are not a substitute for professional care. Please consult a qualified doctor or Ayurvedic practitioner before using any product, especially if you are pregnant, nursing, taking other medicines or managing a health condition. Individual experiences vary.</p>"]};
 function openPol(k){$("#pt").textContent=POL[k][0];$("#pb").innerHTML=POL[k][1];open($("#po"))}
 
@@ -349,23 +399,62 @@ const opt=(a,ph)=>`<option value="">${ph}</option>`+a.map(x=>`<option>${x}</opti
 $("#s").innerHTML=opt(STATES,"Select state");$("#h").innerHTML=opt(CONCERNS,"Select concern");$("#k").innerHTML=opt(CATS.map(c=>c[1]),"Select category");
 function openEnq(p){if(p){$("#k").value=CN[p[0]];$("#p").value=p[1]}open($("#enq"))}
 function rememberDismiss(){try{localStorage.setItem("dv_enq",Date.now())}catch(e){}}
-setTimeout(()=>{let t=0;try{t=+localStorage.getItem("dv_enq")||0}catch(e){}
- if(Date.now()-t>7*864e5&&!$(".mo.open")){open($("#enq"));rememberDismiss()}},1800);
+function startPopup(){setTimeout(()=>{let t=0;try{t=+localStorage.getItem("dv_enq")||0}catch(e){}
+ if(Date.now()-t>7*864e5&&!$(".mo.open")){open($("#enq"));rememberDismiss()}},1200)}
 $("#m").addEventListener("input",e=>e.target.value=e.target.value.replace(/[^\d+\s]/g,""));
 const rules={n:v=>v.trim().length>=2||"Enter your full name.",m:v=>/^(\+?91)?[\s-]?[6-9]\d{9}$/.test(v.replace(/\s/g,""))||"Enter a valid 10-digit Indian mobile number.",c:v=>v.trim().length>=2||"Enter your city.",s:v=>!!v||"Select your state.",h:v=>!!v||"Select a health concern.",k:v=>!!v||"Select a medicine category."};
 function check(id){const el=$("#"+id),r=rules[id](el.value),f=el.parentNode;f.classList.toggle("bad",r!==true);$(".er",f).textContent=r===true?"":r;return r===true}
 Object.keys(rules).forEach(id=>$("#"+id).addEventListener("blur",()=>check(id)));
-$("#ef").addEventListener("submit",e=>{e.preventDefault();
- const ok=Object.keys(rules).map(check).every(Boolean);
- if(!ok){$(".bad input,.bad select")?.focus();return}
- const v=id=>$("#"+id).value.trim();
- const msg=`Hello Devbhoomee Ayurveda, I would like to make an enquiry.\n\nName: ${v("n")}\nMobile: ${v("m")}\nCity: ${v("c")}\nState: ${v("s")}\nHealth concern: ${v("h")}\nMedicine category: ${v("k")}\nMedicine required: ${v("p")||"Not specified"}\nMessage: ${v("g")||"None"}`;
- rememberDismiss();window.open(wa(msg),"_blank","noopener");$("#ef").reset();closeAll()});
+function toast(t,bad){let e=$("#toast");if(!e){e=document.createElement("div");e.id="toast";e.setAttribute("role","status");document.body.appendChild(e)}
+ e.textContent=t;e.className=bad?"bad show":"show";clearTimeout(e._t);e._t=setTimeout(()=>e.classList.remove("show"),9000)}
+$("#ef").addEventListener("submit",async e=>{e.preventDefault();
+ if(!Object.keys(rules).map(check).every(Boolean)){$(".bad input,.bad select")?.focus();return}
+ const v=id=>$("#"+id).value.trim(),C=window.DV_CONFIG||{},btn=$("#ef button[type=submit]");
+ if(!C.SUPABASE_URL||C.SUPABASE_URL.includes("YOUR-")){toast("The enquiry system is not set up yet. Please contact us on WhatsApp: 93110 15592.",1);return}
+ btn.disabled=true;btn.textContent="Submitting…";
+ const w=window.open("about:blank","_blank");
+ try{
+  const res=await fetch(C.SUPABASE_URL+"/rest/v1/rpc/submit_inquiry",{method:"POST",headers:{"Content-Type":"application/json",apikey:C.SUPABASE_ANON_KEY},
+   body:JSON.stringify({p_name:v("n"),p_mobile:v("m"),p_city:v("c"),p_state:v("s"),p_concern:v("h"),p_category:v("k"),p_product:v("p"),p_message:v("g")})});
+  if(!res.ok)throw new Error(await res.text());
+  const d=await res.json(),row=Array.isArray(d)?d[0]:d;
+  const msg=`Hello Devbhoomee Ayurveda, I would like to make an enquiry.\nEnquiry no: ${row.seq}\n\nName: ${v("n")}\nMobile: ${v("m")}\nProduct: ${v("p")||"Not specified"}\nCategory: ${v("k")}\nCity: ${v("c")}\nState: ${v("s")}\nHealth concern: ${v("h")}\nMessage: ${v("g")||"None"}`;
+  const url=`https://wa.me/${row.assigned_number}?text=${encodeURIComponent(msg)}`;
+  rememberDismiss();$("#ef").reset();closeAll();
+  toast("Thank you! Your enquiry is saved. WhatsApp is opening. Please press Send there to deliver your message.");
+  if(w)w.location.href=url;else location.href=url;
+ }catch(err){if(w)w.close();toast("Sorry, we could not save your enquiry. Please try again, or message us on WhatsApp: 93110 15592.",1)}
+ finally{btn.disabled=false;btn.textContent="Submit Enquiry"}});
 
+// effects
+const RM=matchMedia("(prefers-reduced-motion:reduce)").matches,mob=innerWidth<620,r=Math.random;
+const leaf=c=>`url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cpath d='M32 58C12 47 10 24 32 4c22 20 20 43 0 54z' fill='${c}'/%3E%3C/svg%3E")`;
+const LC=["%23a9c0a0","%234f7a4a","%23b89c5e","%2395b08a"],DC=["%23ffffff","%23a9c0a0","%23d8c38a"];
+function fill(f,nl,nd,cols,op){for(let i=0;i<nl;i++){const e=document.createElement("i"),z=14+r()*24;e.className="lf";
+ e.style.cssText=`left:${r()*100}%;width:${z}px;height:${z}px;--dx:${(r()*160-80)|0}px;animation-duration:${12+r()*12}s;animation-delay:${-r()*20}s;opacity:${op+r()*.3};background-image:${leaf(cols[i%cols.length])}`;f.appendChild(e)}
+ for(let i=0;i<nd;i++){const e=document.createElement("i"),z=3+r()*4;e.className="dt";
+ e.style.cssText=`left:${r()*100}%;width:${z}px;height:${z}px;--dx:${(r()*80-40)|0}px;animation-duration:${9+r()*10}s;animation-delay:${-r()*16}s`;f.appendChild(e)}}
+if(!RM){
+ fill($(".bgfx"),mob?8:16,mob?10:22,LC,.35);
+ $$("section:not(.hero),footer").forEach(sec=>{const f=document.createElement("div");f.className="bgfx lite";f.setAttribute("aria-hidden","true");sec.prepend(f);
+  const dark=sec.matches(".about,.cta,footer");fill(f,mob?3:6,mob?4:8,dark?DC:LC,dark?.18:.22)});
+ addEventListener("pointerdown",e=>{if(e.target.closest("input,select,textarea"))return;const x=e.clientX,y=e.clientY,g=document.createElement("i");
+  g.className="rp";g.style.cssText=`left:${x}px;top:${y}px`;document.body.appendChild(g);setTimeout(()=>g.remove(),700);
+  for(let i=0;i<9;i++){const a=Math.PI*2*i/9+r()*.6,d=40+r()*55,l=document.createElement("i");l.className="bl";
+   l.style.cssText=`left:${x}px;top:${y}px;--x:${Math.cos(a)*d}px;--y:${Math.sin(a)*d}px;--r:${(r()*360)|0}deg;background-image:${leaf(LC[i%4])}`;document.body.appendChild(l);setTimeout(()=>l.remove(),900)}});
+ if(matchMedia("(hover:hover)").matches){const cg=$("#cg");let tx=-400,ty=-400,cx=tx,cy=ty;addEventListener("pointermove",e=>{tx=e.clientX;ty=e.clientY},{passive:true});
+  (function lp(){cx+=(tx-cx)*.12;cy+=(ty-cy)*.12;cg.style.transform=`translate(${cx}px,${cy}px)`;requestAnimationFrame(lp)})()}
+}else{$("#cg").remove()}
+function sizeFx(){$$(".bgfx").forEach(f=>f.style.setProperty("--fh",f.parentNode.offsetHeight+"px"))}
+sizeFx();addEventListener("resize",sizeFx);addEventListener("load",sizeFx);
+// preloader
+const pre=$("#pre"),t0=performance.now();let done=0;
+function ready(){if(done)return;done=1;setTimeout(()=>{pre.classList.add("out");document.body.classList.remove("loading");setTimeout(()=>pre.remove(),900);startPopup()},Math.max(0,1600-(performance.now()-t0)))}
+if(document.readyState=="complete")ready();else addEventListener("load",ready);setTimeout(ready,5000);
 // nav + reveal
 const hd=$("#hd"),lk=$("#lk"),bg=$("#bg");
 const art_=$(".art");if(art_&&matchMedia("(hover:hover)").matches)addEventListener("pointermove",e=>{const x=(e.clientX/innerWidth-.5)*14,y=(e.clientY/innerHeight-.5)*8;art_.style.setProperty("--px",x+"px");art_.style.setProperty("--py",y+"px")},{passive:true});
-addEventListener("scroll",()=>hd.classList.toggle("s",scrollY>30),{passive:true});
+const pg=$("#pg");addEventListener("scroll",()=>{hd.classList.toggle("s",scrollY>30);pg.style.transform=`scaleX(${scrollY/Math.max(1,document.documentElement.scrollHeight-innerHeight)})`},{passive:true});
 function toggleMenu(s){lk.classList.toggle("open",s);bg.setAttribute("aria-expanded",s)}
 bg.onclick=()=>toggleMenu(!lk.classList.contains("open"));
 const io=new IntersectionObserver(es=>es.forEach(x=>{if(x.isIntersecting){x.target.classList.add("in");io.unobserve(x.target)}}),{threshold:.12});
