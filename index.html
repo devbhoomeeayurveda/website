@@ -386,21 +386,21 @@ document.addEventListener("keydown",e=>{if(e.key=="Escape")closeAll()});
 
 // modals
 let last=null;
-function open(m){last=document.activeElement;m.classList.add("open");document.body.style.overflow="hidden";setTimeout(()=>$("button,input,select",m)?.focus(),60)}
+function openM(m){last=document.activeElement;m.classList.add("open");document.body.style.overflow="hidden";setTimeout(()=>$("button,input,select",m)?.focus(),60)}
 function closeAll(){const was=$(".mo.open");$$(".mo.open").forEach(m=>m.classList.remove("open"));document.body.style.overflow="";if(was&&was.id=="enq")rememberDismiss();last&&last.focus&&last.focus()}
 function openProd(i){const p=P[i];$("#pi").innerHTML=`<img src="${IMG}" alt="${p[1]}" onerror="fb(this,${i})">`;$("#pc").textContent=CN[p[0]];$("#pn").textContent=p[1];$("#pd").textContent=p[2];
- $("#pw").onclick=()=>{closeAll();openEnq(p)};open($("#pm"))}
+ $("#pw").onclick=()=>{closeAll();openEnq(p)};openM($("#pm"))}
 const POL={privacy:["Privacy Policy","<p>Details you submit in the enquiry form (name, mobile number, city, state, product and message) are saved securely so our team can respond. They are shared only with the team member who assists you. When you send your message, WhatsApp’s own privacy terms apply.</p><p>We use your details only to respond to your enquiry. To ask us anything about your data, message us on WhatsApp.</p>"],
 disc:["Medical Disclaimer","<p>Information on this website is for general awareness only. It is not medical advice, diagnosis or treatment.</p><p>Ayurvedic products are not a substitute for professional care. Please consult a qualified doctor or Ayurvedic practitioner before using any product, especially if you are pregnant, nursing, taking other medicines or managing a health condition. Individual experiences vary.</p>"]};
-function openPol(k){$("#pt").textContent=POL[k][0];$("#pb").innerHTML=POL[k][1];open($("#po"))}
+function openPol(k){$("#pt").textContent=POL[k][0];$("#pb").innerHTML=POL[k][1];openM($("#po"))}
 
 // enquiry form
 const opt=(a,ph)=>`<option value="">${ph}</option>`+a.map(x=>`<option>${x}</option>`).join("");
 $("#s").innerHTML=opt(STATES,"Select state");$("#h").innerHTML=opt(CONCERNS,"Select concern");$("#k").innerHTML=opt(CATS.map(c=>c[1]),"Select category");
-function openEnq(p){if(p){$("#k").value=CN[p[0]];$("#p").value=p[1]}open($("#enq"))}
+function openEnq(p){if(p){$("#k").value=CN[p[0]];$("#p").value=p[1]}openM($("#enq"))}
 function rememberDismiss(){try{localStorage.setItem("dv_enq",Date.now())}catch(e){}}
 function startPopup(){setTimeout(()=>{let t=0;try{t=+localStorage.getItem("dv_enq")||0}catch(e){}
- if(Date.now()-t>7*864e5&&!$(".mo.open")){open($("#enq"));rememberDismiss()}},1200)}
+ if(Date.now()-t>7*864e5&&!$(".mo.open")){openM($("#enq"));rememberDismiss()}},1200)}
 $("#m").addEventListener("input",e=>e.target.value=e.target.value.replace(/[^\d+\s]/g,""));
 const rules={n:v=>v.trim().length>=2||"Enter your full name.",m:v=>/^(\+?91)?[\s-]?[6-9]\d{9}$/.test(v.replace(/\s/g,""))||"Enter a valid 10-digit Indian mobile number.",c:v=>v.trim().length>=2||"Enter your city.",s:v=>!!v||"Select your state.",h:v=>!!v||"Select a health concern.",k:v=>!!v||"Select a medicine category."};
 function check(id){const el=$("#"+id),r=rules[id](el.value),f=el.parentNode;f.classList.toggle("bad",r!==true);$(".er",f).textContent=r===true?"":r;return r===true}
@@ -412,9 +412,9 @@ $("#ef").addEventListener("submit",async e=>{e.preventDefault();
  const v=id=>$("#"+id).value.trim(),C=window.DV_CONFIG||{},btn=$("#ef button[type=submit]");
  if(!C.SUPABASE_URL||C.SUPABASE_URL.includes("YOUR-")){toast("The enquiry system is not set up yet. Please contact us on WhatsApp: 93110 15592.",1);return}
  btn.disabled=true;btn.textContent="Submitting…";
- const w=window.open("about:blank","_blank");
+ const w=window.open("about:blank","_blank"),ac=new AbortController(),tm=setTimeout(()=>ac.abort(),15000);
  try{
-  const res=await fetch(C.SUPABASE_URL+"/rest/v1/rpc/submit_inquiry",{method:"POST",headers:{"Content-Type":"application/json",apikey:C.SUPABASE_ANON_KEY},
+  const res=await fetch(C.SUPABASE_URL+"/rest/v1/rpc/submit_inquiry",{method:"POST",signal:ac.signal,headers:{"Content-Type":"application/json",apikey:C.SUPABASE_ANON_KEY},
    body:JSON.stringify({p_name:v("n"),p_mobile:v("m"),p_city:v("c"),p_state:v("s"),p_concern:v("h"),p_category:v("k"),p_product:v("p"),p_message:v("g")})});
   if(!res.ok)throw new Error(await res.text());
   const d=await res.json(),row=Array.isArray(d)?d[0]:d;
@@ -423,8 +423,8 @@ $("#ef").addEventListener("submit",async e=>{e.preventDefault();
   rememberDismiss();$("#ef").reset();closeAll();
   toast("Thank you! Your enquiry is saved. WhatsApp is opening. Please press Send there to deliver your message.");
   if(w)w.location.href=url;else location.href=url;
- }catch(err){if(w)w.close();toast("Sorry, we could not save your enquiry. Please try again, or message us on WhatsApp: 93110 15592.",1)}
- finally{btn.disabled=false;btn.textContent="Submit Enquiry"}});
+ }catch(err){if(w)w.close();toast(err.name=="AbortError"?"The connection is slow or blocked on your network. Please try on another network, or message us on WhatsApp: 93110 15592.":"Sorry, we could not save your enquiry. Please try again, or message us on WhatsApp: 93110 15592.",1)}
+ finally{clearTimeout(tm);btn.disabled=false;btn.textContent="Submit Enquiry"}});
 
 // effects
 const RM=matchMedia("(prefers-reduced-motion:reduce)").matches,mob=innerWidth<620,r=Math.random;
