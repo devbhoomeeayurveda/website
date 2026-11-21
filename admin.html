@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Inquiry Management | Devbhoomee Ayurveda</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%231f3d2b'/%3E%3Cpath d='M32 50C18 42 16 26 32 12c16 14 14 30 0 38z' fill='%23a9c0a0'/%3E%3C/svg%3E">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Hanken+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--g9:#16301f;--g8:#1f3d2b;--g6:#4f7a4a;--g3:#a9c0a0;--g1:#e4ecdc;--b1:#f3ede0;--b2:#e6dcc6;--w:#fffdf8;--sand:#b89c5e;--ink:#22302a}
+*{box-sizing:border-box;margin:0}
+body{font:400 1rem/1.6 'Hanken Grotesk',system-ui,sans-serif;color:var(--ink);background:var(--b1);min-height:100vh}
+h1,h2{font-family:'Cormorant Garamond',Georgia,serif;color:var(--g8);line-height:1.1}
+.wrap{width:min(1200px,94%);margin:auto;padding:24px 0 60px}
+.bar{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:22px}
+h1{font-size:2.2rem}
+.btn{padding:10px 20px;border-radius:99px;border:1.5px solid var(--g8);background:var(--g8);color:#fff;font:600 .92rem 'Hanken Grotesk',sans-serif;cursor:pointer;transition:.3s}
+.btn:hover{background:var(--g6);border-color:var(--g6)}.btn.o{background:transparent;color:var(--g8)}.btn.o:hover{background:var(--g8);color:#fff}
+.box{background:var(--w);border-radius:20px;padding:22px;box-shadow:0 6px 24px -16px rgba(22,48,31,.5)}
+#login{max-width:420px;margin:12vh auto 0}#login form{display:grid;gap:12px;margin-top:16px}
+input,select{padding:11px 14px;border-radius:12px;border:1.5px solid var(--b2);background:#fff;font:inherit;color:var(--ink);width:100%}
+input:focus,select:focus{outline:0;border-color:var(--g6);box-shadow:0 0 0 4px var(--g1)}
+.err{color:#b3392f;font-size:.9rem;min-height:1.2em}
+.tot{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:12px;margin-bottom:18px}
+.tot div{background:var(--w);border-radius:16px;padding:14px 16px;border-left:4px solid var(--sand)}
+.tot b{display:block;font:700 1.9rem 'Cormorant Garamond',serif;color:var(--g8);line-height:1.1}.tot small{color:#5b6b60}
+.tools{display:grid;grid-template-columns:1fr 220px auto;gap:10px;margin-bottom:14px}
+.tw{overflow-x:auto;border-radius:14px;border:1px solid var(--b2)}
+table{border-collapse:collapse;width:100%;min-width:980px;font-size:.9rem}
+th,td{padding:10px 12px;text-align:left;border-bottom:1px solid var(--b2);vertical-align:top}
+th{background:var(--g8);color:#fff;font-weight:600;position:sticky;top:0;white-space:nowrap}
+tr:hover td{background:#faf6ec}
+.tag{display:inline-block;padding:2px 10px;border-radius:99px;font-size:.78rem;font-weight:600;background:var(--g1);color:var(--g8);white-space:nowrap}.tag.w{background:#f4e8c9;color:#6b5420}
+.hide{display:none!important}.muted{color:#66766b;font-size:.85rem;margin-top:10px}
+@media(max-width:720px){.tools{grid-template-columns:1fr}h1{font-size:1.7rem}}
+</style></head><body>
+<div class="wrap">
+<div id="login" class="box"><h2>Admin Login</h2><p class="muted">Inquiry Management, Devbhoomee Ayurveda</p>
+<form id="lf"><input id="em" type="email" placeholder="Email" autocomplete="username" required><input id="pw" type="password" placeholder="Password" autocomplete="current-password" required><button class="btn" type="submit">Sign In</button><div class="err" id="le"></div></form></div>
+
+<div id="app" class="hide">
+<div class="bar"><h1>Inquiry Management</h1><div><button class="btn o" id="rf">Refresh</button> <button class="btn o" id="out">Sign Out</button></div></div>
+<div class="tot" id="tot"></div>
+<div class="box">
+<div class="tools"><input id="q" type="search" placeholder="Search by customer name or phone number"><select id="cf"><option value="">All categories</option><option value="weight_loss">Weight Loss</option><option value="wellness">Piles / Other / Sexual Wellness</option></select><button class="btn" id="csv">Export CSV</button></div>
+<div class="tw"><table><thead><tr><th>Seq #</th><th>Date &amp; Time</th><th>Customer</th><th>Phone</th><th>Product</th><th>Category</th><th>Group</th><th>Assigned Number</th><th>City, State</th><th>Message</th></tr></thead><tbody id="rows"></tbody></table></div>
+<p class="muted" id="cnt"></p>
+<p class="muted">Seq # counts inside each group (Weight Loss and Wellness have separate sequences). The CSV file opens in Excel.</p>
+</div></div></div>
+
+<script src="config.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
+<script>
+const $=s=>document.querySelector(s),C=window.DV_CONFIG||{};
+const esc=t=>String(t??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const fmt=p=>{p=String(p).replace(/\D/g,"");return p.length==12?`+${p.slice(0,2)} ${p.slice(2,7)} ${p.slice(7)}`:p.length==10?`+91 ${p.slice(0,5)} ${p.slice(5)}`:p};
+const GN={weight_loss:"Weight Loss",wellness:"Wellness"};
+let sb,data=[],nums=[];
+if(!C.SUPABASE_URL||C.SUPABASE_URL.includes("YOUR-")){$("#le").textContent="Supabase is not configured. Edit config.js first."}
+else sb=supabase.createClient(C.SUPABASE_URL,C.SUPABASE_ANON_KEY);
+
+async function start(){
+  const {data:{session}}=await sb.auth.getSession();
+  if(!session){$("#login").classList.remove("hide");$("#app").classList.add("hide");return}
+  const {data:a}=await sb.from("admins").select("user_id").eq("user_id",session.user.id);
+  if(!a||!a.length){await sb.auth.signOut();$("#le").textContent="This account is not an admin.";$("#login").classList.remove("hide");return}
+  $("#login").classList.add("hide");$("#app").classList.remove("hide");load()}
+async function load(){
+  const n=await sb.from("sales_numbers").select("*").order("route_group").order("slot");nums=n.data||[];
+  data=[];for(let f=0;;f+=1000){const r=await sb.from("inquiries").select("*").order("created_at",{ascending:false}).range(f,f+999);
+    if(r.error){$("#cnt").textContent="Could not load: "+r.error.message;break}data=data.concat(r.data);if(r.data.length<1000)break}
+  totals();draw()}
+function totals(){
+  const c={};data.forEach(d=>c[d.assigned_number]=(c[d.assigned_number]||0)+1);
+  const g=k=>data.filter(d=>d.route_group==k).length;
+  $("#tot").innerHTML=`<div><b>${data.length}</b><small>Total inquiries</small></div><div><b>${g("weight_loss")}</b><small>Weight Loss</small></div><div><b>${g("wellness")}</b><small>Piles / Other / Sexual Wellness</small></div>`+
+   nums.map(n=>`<div><b>${c[n.phone]||0}</b><small>${esc(fmt(n.phone))}<br>${esc(n.label||"")}</small></div>`).join("")}
+function view(){const q=$("#q").value.trim().toLowerCase(),qd=q.replace(/\D/g,""),g=$("#cf").value;
+  return data.filter(d=>(!g||d.route_group==g)&&(!q||d.name.toLowerCase().includes(q)||(qd&&(d.mobile.includes(qd)||d.assigned_number.includes(qd)))))}
+function draw(){const v=view();
+  $("#rows").innerHTML=v.map(d=>`<tr><td>${d.seq}</td><td>${esc(new Date(d.created_at).toLocaleString("en-IN"))}</td><td>${esc(d.name)}</td><td>${esc(fmt(d.mobile))}</td><td>${esc(d.product||"-")}</td><td>${esc(d.category)}</td><td><span class="tag ${d.route_group=="wellness"?"w":""}">${GN[d.route_group]||esc(d.route_group)}</span></td><td>${esc(fmt(d.assigned_number))}</td><td>${esc([d.city,d.state].filter(Boolean).join(", "))}</td><td>${esc(d.message||"")}</td></tr>`).join("")||`<tr><td colspan="10">No inquiries found.</td></tr>`;
+  $("#cnt").textContent=`Showing ${v.length} of ${data.length} inquiries`}
+function csv(){const h=["Seq","Date & Time","Customer","Phone","Product","Category","Group","Assigned Number","City","State","Health Concern","Message"];
+  const q=t=>`"${String(t??"").replace(/"/g,'""').replace(/^([=+\-@])/,"'$1")}"`;
+  const rows=view().map(d=>[d.seq,new Date(d.created_at).toLocaleString("en-IN"),d.name,fmt(d.mobile),d.product,d.category,GN[d.route_group],fmt(d.assigned_number),d.city,d.state,d.health_concern,d.message].map(q).join(","));
+  const b=new Blob(["\ufeff"+[h.map(q).join(","),...rows].join("\r\n")],{type:"text/csv"}),a=document.createElement("a");
+  a.href=URL.createObjectURL(b);a.download="devbhoomee-inquiries-"+new Date().toISOString().slice(0,10)+".csv";a.click();URL.revokeObjectURL(a.href)}
+if(sb){
+ $("#lf").onsubmit=async e=>{e.preventDefault();$("#le").textContent="";
+  const {error}=await sb.auth.signInWithPassword({email:$("#em").value.trim(),password:$("#pw").value});
+  if(error)$("#le").textContent="Login failed: "+error.message;else start()};
+ $("#out").onclick=async()=>{await sb.auth.signOut();start()};$("#rf").onclick=load;
+ $("#q").oninput=draw;$("#cf").onchange=draw;$("#csv").onclick=csv;start()}
+</script></body></html>
